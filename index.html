@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>แผนภาพต้นไม้ความน่าจะเป็น ม.3</title>
+<style>
+:root{--blue:#235b91;--blue2:#347fbd;--pale:#edf6ff;--ink:#24384d;--muted:#6b7e91;--line:#d8e4ef;--green:#149b78;--gold:#f0b43c}
+*{box-sizing:border-box}body{margin:0;background:#f3f8fc;color:var(--ink);font-family:Tahoma,"Noto Sans Thai",sans-serif}
+header{background:linear-gradient(110deg,#183f69,#327fba);color:white;text-align:center;padding:24px 16px}
+header h1{font-size:clamp(23px,4vw,32px);margin:0 0 6px}header p{margin:0;font-size:14px;opacity:.95}
+main{max-width:1180px;margin:22px auto;padding:0 15px 32px}.panel{background:white;border:1px solid var(--line);border-radius:17px;padding:18px;margin-bottom:16px;box-shadow:0 7px 22px #1c42600b}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}button,select,input,textarea{font:inherit}
+button{border:0;border-radius:10px;padding:10px 15px;font-weight:700;cursor:pointer;background:#e9f2fb;color:var(--blue)}button.primary{background:var(--blue2);color:white}button:hover{filter:brightness(.96)}
+h2{font-size:19px;color:var(--blue);margin:0 0 12px}.controls{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:14px;margin-top:15px}
+label{font-weight:700;font-size:14px;display:block;margin-bottom:6px}select,input[type=text],input[type=number],textarea{width:100%;padding:10px;border:1px solid #cbd9e6;border-radius:9px;background:white;color:var(--ink)}
+.small{font-size:12px;color:var(--muted);line-height:1.55}.question{background:#eff7ff;border:1px solid #d5e9fb;border-radius:12px;padding:14px;line-height:1.7;margin-top:14px}
+.question strong{color:var(--blue)}.editrow{display:grid;grid-template-columns:1fr auto;gap:9px;align-items:end;margin-top:10px}
+.treewrap{overflow:auto;border:1px solid var(--line);border-radius:13px;background:#fff;min-height:300px}
+svg{display:block;min-width:100%}.branch{stroke:#71879a;stroke-width:1.7;fill:none}.branch.hit{stroke:var(--green);stroke-width:2.8}.node{fill:#fff;stroke:#7890a5;stroke-width:1.5}.node.hit{fill:#dff7ef;stroke:var(--green);stroke-width:2}
+.edge-label{font-size:13px;fill:#334b61;font-weight:700}.leaf-label{font-size:13px;fill:#253d53;font-weight:700}.leaf-label.hit{fill:#08785e}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:10px}.key{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;background:#71879a}.key.green{background:var(--green)}
+.result{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.pill{background:#f2f7fb;border:1px solid var(--line);padding:8px 12px;border-radius:999px;font-size:13px}
+.notice{padding:10px 12px;background:#fff8e8;border:1px solid #f1dfb6;border-radius:10px;margin-top:10px;font-size:13px;line-height:1.6}
+@media(max-width:760px){.controls{grid-template-columns:1fr}.editrow{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><h1>🌳 แผนภาพต้นไม้ความน่าจะเป็น</h1><p>ปรับโจทย์ได้ • กำหนดจำนวนครั้งได้ไม่จำกัด • เลือกแบบหยิบคืนและไม่หยิบคืน</p></header>
+<main>
+<section class="panel">
+<h2>🎲 เลือกสถานการณ์และปรับโจทย์</h2>
+<div class="toolbar"><button class="primary" id="randomBtn">⤨ สุ่มโจทย์ใหม่</button><button id="resetBtn">↺ กลับค่าเริ่มต้น</button><span class="small">ปรับจำนวนครั้งและผลลัพธ์ได้ตามต้องการ</span></div>
+<div class="controls">
+<div><label for="scenario">สถานการณ์</label><select id="scenario">
+<option value="coin">โยนเหรียญ</option><option value="dice">ทอดลูกเต๋า</option><option value="balls">หยิบลูกบอล</option><option value="cards">หยิบบัตรตัวเลข</option><option value="custom">กำหนดผลลัพธ์เอง</option></select></div>
+<div><label for="stages">จำนวนครั้ง / ขั้นตอน</label><input id="stages" type="number" min="1" step="1" value="3"><div class="small" id="stageHint">กำหนดจำนวนครั้งได้ตามต้องการ ไม่มีเพดานที่กำหนดไว้</div></div>
+<div><label for="drawMode">รูปแบบการหยิบ</label><select id="drawMode"><option value="with">หยิบคืน (ใส่กลับก่อนหยิบครั้งถัดไป)</option><option value="without">ไม่หยิบคืน (ไม่นำกลับเข้าไป)</option></select><div class="small">ใช้กับการหยิบลูกบอลและหยิบบัตรตัวเลข</div></div>
+<div><label for="customOutcomes">ผลลัพธ์ในแต่ละครั้ง (กรณีกำหนดเอง)</label><input id="customOutcomes" type="text" value="A, B"><div class="small">พิมพ์ผลลัพธ์คั่นด้วยจุลภาค เพิ่มได้ตามต้องการ เช่น แดง, ขาว, น้ำเงิน, เขียว</div></div>
+<div><label for="eventType">เหตุการณ์ที่ต้องการพิจารณา</label><select id="eventType"><option value="first">ครั้งแรกได้ผลลัพธ์ที่เลือก</option><option value="contains">มีผลลัพธ์ที่เลือกอย่างน้อย 1 ครั้ง</option><option value="all">ได้ผลลัพธ์เหมือนกันทุกครั้ง</option></select></div>
+<div><label for="eventValue">ผลลัพธ์ที่เลือก</label><input id="eventValue" type="text" value="หัว (H)"><div class="small">ระบุให้ตรงกับชื่อผลลัพธ์ด้านบน</div></div>
+</div>
+<div class="question"><strong>โจทย์ที่กำหนด</strong><div id="prompt"></div></div>
+<div class="editrow"><div><label for="editPrompt">แก้ไขข้อความโจทย์ได้ตามต้องการ</label><textarea id="editPrompt"></textarea></div><button class="primary" id="applyPrompt">บันทึกข้อความโจทย์</button></div>
+<div id="notice" class="notice" style="display:none"></div>
+</section>
+<section class="panel">
+<h2>🌿 แผนภาพต้นไม้แสดงผลลัพธ์ทั้งหมด</h2>
+<div class="small">อ่านจากซ้ายไปขวา แต่ละเส้นทางจากจุดเริ่มต้นถึงปลายกิ่ง คือผลลัพธ์ที่เป็นไปได้หนึ่งแบบ</div>
+<div class="treewrap" id="treeWrap"><svg id="tree" role="img" aria-label="แผนภาพต้นไม้แสดงผลลัพธ์ทั้งหมด"></svg></div>
+<div class="legend"><span><i class="key"></i>เส้นทางผลลัพธ์ทั่วไป</span><span><i class="key green"></i>เส้นทางที่ตรงกับเหตุการณ์</span></div>
+<div class="result" id="summary"></div>
+<div id="outcomeList" class="small" style="margin-top:12px;line-height:1.9"></div>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const presets={
+ coin:{name:'โยนเหรียญ',out:['หัว (H)','ก้อย (T)']},
+ dice:{name:'ทอดลูกเต๋า',out:['1','2','3','4','5','6']},
+ balls:{name:'หยิบลูกบอล',out:['แดง','น้ำเงิน','เหลือง']},
+ cards:{name:'หยิบบัตรตัวเลข',out:['1','2','3','4']},
+ custom:{name:'ทดลองสุ่ม',out:['A','B']}
+};
+let current={scenario:'coin',out:presets.coin.out,stages:3,mode:'with',hit:null,prompt:''};
+function clean(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function readConfig(){
+ const scenario=$('scenario').value, out=scenario==='custom'?$('customOutcomes').value.split(',').map(x=>x.trim()).filter(Boolean):presets[scenario].out;
+ const stages=Math.floor(Number($('stages').value)), mode=$('drawMode').value;
+ if(!Number.isFinite(stages)||stages<1)throw Error('จำนวนครั้งต้องเป็นจำนวนเต็มตั้งแต่ 1 ครั้งขึ้นไป');
+ if(out.length<2)throw Error('กรุณากำหนดผลลัพธ์อย่างน้อย 2 แบบ');
+ if(mode==='without'&&(scenario==='balls'||scenario==='cards'||scenario==='custom')&&stages>out.length)throw Error(`กรณีไม่หยิบคืน จำนวนครั้งต้องไม่เกินจำนวนสิ่งที่มี (${out.length} ครั้ง)`);
+ return {scenario,out,stages,mode};
+}
+function childrenFor(path,cfg){
+ if(cfg.mode==='without'&&['balls','cards','custom'].includes(cfg.scenario))return cfg.out.filter(x=>!path.includes(x));
+ return cfg.out;
+}
+function enumerate(cfg){
+ const leaves=[];
+ function walk(path){if(path.length===cfg.stages){leaves.push(path);return}childrenFor(path,cfg).forEach(v=>walk([...path,v]))}
+ walk([]);return leaves;
+}
+function isHit(path){
+ const value=$('eventValue').value.trim(), type=$('eventType').value;
+ if(type==='first')return path[0]===value;
+ if(type==='contains')return path.includes(value);
+ return path.every(x=>x===path[0]);
+}
+function makeQuestion(randomize=true){
+ try{
+  const cfg=readConfig();current={...cfg,hit:null,prompt:''};
+  if(randomize&&cfg.scenario==='coin')$('eventValue').value=Math.random()<.5?'หัว (H)':'ก้อย (T)';
+  const modeText=(cfg.scenario==='balls'||cfg.scenario==='cards'||cfg.scenario==='custom')?(cfg.mode==='with'?'แบบหยิบคืน':'แบบไม่หยิบคืน'):'';
+  const name=presets[cfg.scenario].name;
+  const prompt=`${name} ${cfg.stages} ครั้ง ${modeText} โดยมีผลลัพธ์ในแต่ละครั้ง ${cfg.out.join(', ')} จงเขียนแผนภาพต้นไม้แสดงผลลัพธ์ทั้งหมด และพิจารณาเหตุการณ์: ${$('eventType').selectedOptions[0].text} (${ $('eventValue').value.trim()||'ไม่ระบุ' })`;
+  current.prompt=prompt;$('prompt').textContent=prompt;$('editPrompt').value=prompt;
+  $('notice').style.display='none';render();
+ }catch(e){$('notice').textContent=e.message;$('notice').style.display='block';$('tree').innerHTML='';$('summary').innerHTML='';$('outcomeList').textContent='';}
+}
+function render(){
+ const leaves=enumerate(current), hitLeaves=leaves.filter(isHit), n=current.stages, out=current.out;
+ // A complete tree is exponential; this notice prevents accidental browser lockups while preserving unrestricted input.
+ const total=leaves.length;
+ const row= Math.max(27,Math.min(38,900/Math.max(1,total))), top=42, left=62, xGap= Math.max(125,Math.min(185,900/Math.max(1,n))), height=Math.max(280,top*2+total*row), width=left+n*xGap+Math.max(220,Math.max(...leaves.map(p=>p.join(' → ').length),10)*8);
+ let markup=`<text x="15" y="23" font-size="13" fill="#647b90">เริ่มต้น</text>`;
+ const hitSet=new Set(hitLeaves.map(p=>p.join('\u0001')));
+ function draw(path,level,offset){
+  const subset=leaves.filter(p=>path.every((v,i)=>p[i]===v));
+  const first=leaves.findIndex(p=>path.every((v,i)=>p[i]===v));
+  const last=first+subset.length-1, y=top+((first+last)/2)*row, x=left+level*xGap;
+  if(level===0)markup+=`<circle cx="${x}" cy="${y}" r="5" class="node"/>`;
+  if(level===n){
+   const hit=isHit(path), ly=top+first*row;
+   markup+=`<circle cx="${x}" cy="${ly}" r="3.5" class="node ${hit?'hit':''}"/><text x="${x+10}" y="${ly+5}" class="leaf-label ${hit?'hit':''}">${clean(path.join(' → '))}</text>`;
+   return;
+  }
+  const options=childrenFor(path,current);
+  options.forEach(v=>{
+   const next=[...path,v], idx=leaves.findIndex(p=>next.every((z,i)=>p[i]===z));
+   const sub=leaves.filter(p=>next.every((z,i)=>p[i]===z));
+   if(!sub.length)return;
+   const cy=top+(idx+(sub.length-1)/2)*row, nx=x+xGap;
+   const hit=sub.some(isHit);
+   markup+=`<path d="M ${x} ${y} L ${nx} ${cy}" class="branch ${hit?'hit':''}"/><text x="${x+xGap*.48}" y="${(y+cy)/2-5}" class="edge-label">${clean(v)}</text>`;
+   draw(next,level+1,0);
+  });
+ }
+ draw([],0,0);
+ const svg=$('tree');svg.setAttribute('width',width);svg.setAttribute('height',height);svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.innerHTML=markup;
+ $('summary').innerHTML=`<span class="pill">จำนวนผลลัพธ์ทั้งหมด: <b>${total.toLocaleString('th-TH')}</b> แบบ</span><span class="pill">ตรงกับเหตุการณ์: <b>${hitLeaves.length.toLocaleString('th-TH')}</b> แบบ</span><span class="pill">รูปแบบ: <b>${current.mode==='with'?'หยิบคืน':'ไม่หยิบคืน'}</b></span>`;
+ $('outcomeList').innerHTML='<b>ผลลัพธ์ทั้งหมด</b><br>'+leaves.map((p,i)=>`${i+1}. ${clean(p.join(' → '))}${isHit(p)?' ✓':''}`).join('<br>');
+}
+$('randomBtn').addEventListener('click',()=>makeQuestion(true));
+$('scenario').addEventListener('change',()=>{
+ const sc=$('scenario').value;
+ if(sc==='coin')$('eventValue').value='หัว (H)';
+ else if(sc==='dice'||sc==='cards')$('eventValue').value='1';
+ else if(sc==='balls')$('eventValue').value='แดง';
+ else $('eventValue').value='A';
+ $('drawMode').disabled=(sc==='coin'||sc==='dice');
+ if(sc==='coin')$('stages').value=3;else if(sc==='dice')$('stages').value=2;else $('stages').value=2;
+ makeQuestion(false);
+});
+['stages','drawMode','customOutcomes','eventType','eventValue'].forEach(id=>$(id).addEventListener('change',()=>makeQuestion(false)));
+$('applyPrompt').addEventListener('click',()=>{current.prompt=$('editPrompt').value;$('prompt').textContent=current.prompt});
+$('resetBtn').addEventListener('click',()=>{$('scenario').value='coin';$('stages').value=3;$('drawMode').value='with';$('drawMode').disabled=true;$('customOutcomes').value='A, B';$('eventType').value='first';$('eventValue').value='หัว (H)';makeQuestion(false)});
+$('drawMode').disabled=true;makeQuestion(false);
+</script>
+</body></html>
